@@ -12,4 +12,5 @@ razorpay
 ddgs
 mangum
 gunicorn
+huggingface-hub
 
