@@ -41,6 +41,17 @@ CORS(
 handler = Mangum(app)
 
 # -------------------- ROUTES --------------------
+
+@app.route("/", methods=["GET"])
+def home():
+    return {
+        "message": "Welcome to Smart Quiz API",
+        "status": "online",
+        "docs": "/api",
+        "version": "1.0.0"
+    }, 200
+
+
 app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(question_bp, url_prefix="/api")
 app.register_blueprint(web_bp, url_prefix="/api")
