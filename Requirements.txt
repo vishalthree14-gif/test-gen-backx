@@ -1,0 +1,14 @@
+Flask
+flask-cors
+pymongo
+python-dotenv
+PyJWT
+Werkzeug
+flask-mail
+boto3
+imageio
+imageio-ffmpeg
+razorpay
+ddgs
+
+
