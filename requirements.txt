@@ -11,4 +11,5 @@ imageio-ffmpeg
 razorpay
 ddgs
 mangum
+gunicorn
 
