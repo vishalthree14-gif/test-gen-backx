@@ -12,6 +12,7 @@ from routes.compains_routes import compains_bp
 from routes.result_routes import result_bp
 from routes.s3_routes import upload_bp
 from routes.user_token_routes import token_bp
+from mangum import Mangum
 
 app = Flask(__name__)
 
@@ -36,6 +37,8 @@ CORS(
     supports_credentials=True,
     origins=["http://127.0.0.1:5173"]
 )
+
+handler = Mangum(app)
 
 # -------------------- ROUTES --------------------
 app.register_blueprint(auth_bp, url_prefix="/api")

@@ -10,5 +10,5 @@ imageio
 imageio-ffmpeg
 razorpay
 ddgs
-
+mangum
 
