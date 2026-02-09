@@ -1,0 +1,61 @@
+# Python bytecode and caches (recreated in container anyway)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Virtual environments (huge – never copy local venv)
+venv/
+.env/
+env/
+.venv/
+
+# Environment / secrets (critical – don't bake into image!)
+.env
+.env.*
+.env.local
+secrets/*
+
+# Git stuff (not needed in image)
+.git
+.gitignore
+.gitattributes
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing / coverage artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# Build / dist artifacts
+build/
+dist/
+*.egg-info/
+target/
+
+# Logs and temp files
+*.log
+tmp/
+temp/
+
+# Docker-related (no need to include in context)
+docker-compose.yml
+docker-compose.*
+Dockerfile*
+.dockerignore
+
+# OS / Mac junk (if you ever work cross-platform)
+.DS_Store
+Thumbs.db
+
+# Any large data / test files you don't need
+api_txt.txt   # ← if this is big/test data, ignore it; otherwise remove this line

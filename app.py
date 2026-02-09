@@ -42,14 +42,9 @@ handler = Mangum(app)
 
 # -------------------- ROUTES --------------------
 
-@app.route("/", methods=["GET"])
-def home():
-    return {
-        "message": "Welcome to Smart Quiz API",
-        "status": "online",
-        "docs": "/api",
-        "version": "1.0.0"
-    }, 200
+@app.route("/")
+def hello():
+    return "Hello from Flask in Docker!"
 
 
 app.register_blueprint(auth_bp, url_prefix="/api")

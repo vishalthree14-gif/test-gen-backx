@@ -16,3 +16,4 @@ EXPOSE ${PORT:-8080}
 
 # Start command: Use Gunicorn, bind to 0.0.0.0 and Render's $PORT
 CMD ["gunicorn", "--bind", "0.0.0.0:${PORT:-8080}", "app:app"]
+
