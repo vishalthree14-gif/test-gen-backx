@@ -13,6 +13,12 @@ from routes.result_routes import result_bp
 from routes.s3_routes import upload_bp
 from routes.user_token_routes import token_bp
 from mangum import Mangum
+from dotenv import load_dotenv
+
+load_dotenv()
+
+VERCEL_FRONTEND = os.getenv("VERCEL_FRONTEND")
+
 
 app = Flask(__name__)
 
@@ -32,11 +38,15 @@ mail = Mail(app)
 app.mail = mail
 
 # -------------------- CORS --------------------
-CORS(
-    app,
-    supports_credentials=True,
-    origins=["https://skillbridge-six-sigma.vercel.app"]
-)
+# CORS(
+#     app,
+#     supports_credentials=True,
+#     origins=[VERCEL_FRONTEND]
+# )
+
+
+CORS(app, resources={r"/*": {"origins": VERCEL_FRONTEND, "supports_credentials": True}})
+
 
 handler = Mangum(app)
 
