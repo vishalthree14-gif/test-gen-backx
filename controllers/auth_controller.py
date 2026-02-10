@@ -114,7 +114,6 @@ def login_controller():
         )
 
 
-
         return response
 
     except Exception as e:
