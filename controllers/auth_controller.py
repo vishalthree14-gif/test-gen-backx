@@ -67,7 +67,6 @@ def login_controller():
             return jsonify({"message": "Invalid JSON body"}), 400
 
 
-
         required_fields = ["email", "password"]
         missing = validate_required_fields(data, required_fields)
 
@@ -100,17 +99,21 @@ def login_controller():
         #     token,
         #     httponly=True,
         #     samesite="Lax",
+        #     secure=False,        # 🔥 REQUIRED FOR localhost
         #     max_age=24 * 60 * 60
         # )
-        
+
+
         response.set_cookie(
             "access_token",
-            token,
-            httponly=True,
-            samesite="Lax",
-            secure=False,        # 🔥 REQUIRED FOR localhost
-            max_age=24 * 60 * 60
+            value=token,
+            httponly=True,           # secure against XSS
+            secure=True,             # MUST be True in prod (HTTPS)
+            samesite="None",         # required for cross-site
+            max_age=3600 * 24,       # adjust
         )
+
+
 
         return response
 

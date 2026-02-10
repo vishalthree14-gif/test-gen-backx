@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+
 app = Flask(__name__)
 
 # -------------------- CONFIG --------------------
@@ -37,33 +38,31 @@ app.mail = mail
 
 # -------------------- CORS --------------------
 
-VERCEL_FRONTEND = os.getenv("VERCEL_FRONTEND")
+VERCEL_FRONTEND = os.getenv("VERCEL_FRONTEND")  # e.g. https://skillbridge-six-sigma.vercel.app
 
-
-# Defensive: fallback if not set
-allowed_origins = VERCEL_FRONTEND if VERCEL_FRONTEND else "*"
-
-# If it's a single string, make it a list for safety
-if isinstance(allowed_origins, str):
-    allowed_origins = [allowed_origins]
+allowed_origins = []
+if VERCEL_FRONTEND:
+    allowed_origins = [VERCEL_FRONTEND.strip()]
+    # Optional: add preview wildcard support (flask-cors supports simple patterns)
+    # allowed_origins.append("https://*.vercel.app")  # but test carefully
+else:
+    print("WARNING: VERCEL_FRONTEND not set – CORS may fail in prod")
+    allowed_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]  # dev only
 
 CORS(
     app,
-    resources={r"/*": {
+    resources={r"/api/*": {  # narrower than r"/*" – safer
         "origins": allowed_origins,
         "supports_credentials": True,
         "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
         "allow_headers": [
             "Content-Type",
-            "Authorization",
+            "Authorization",  # keep if you ever use Bearer too
             "Accept",
             "X-Requested-With",
-            "Access-Control-Allow-Origin",
-            "Access-Control-Request-Headers",
-            "Access-Control-Request-Method"
         ],
         "expose_headers": ["Authorization", "Content-Disposition"],
-        "max_age": 600  # Cache preflight for 10 min
+        "max_age": 600,
     }}
 )
 
