@@ -146,9 +146,8 @@ def email_compains(emails, quiz_id, user_id):
         student_emails=emails,
         topic_name=topic_name,
         duration=duration,
-        app=current_app     # ← pass it here
+        app=current_app._get_current_object()   # ← THIS is the key change
     )
-
 
     return {"message": "Emails queued / sent successfully"}, 200
 
