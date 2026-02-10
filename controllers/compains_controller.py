@@ -83,33 +83,63 @@ def get_all_people(compains_id):
     return jsonify({"data": all_data}), 200
 
 
+# def email_compains(emails, quiz_id, user_id):
+
+#     quiz_detail = QuizCollection.find_quiz(quiz_id)
+
+#     # print("-------------------------------", quiz_detail)
+
+#     topic_name=quiz_detail.get("topic")
+#     duration=quiz_detail.get("time_duration")
+
+#     emails_no = len(emails)
+#     cost_per_email = int(os.getenv("TOKEN_COST_EMAIL", 100))
+
+#     total_cost = emails_no * cost_per_email
+
+#     token_present = UserTokenCollection.find_user_token(user_id)
+
+#     if token_present < total_cost:
+#         return {"error": "Not enough tokens"}, 400
+
+#     UserTokenCollection.spend_token(user_id, total_cost)
+
+#     email_send = send_quiz_email_to_students(
+
+#         student_emails=emails,   # ✅ FIXED
+#         topic_name=topic_name,
+#         duration=duration
+#     )
+
+#     return email_send
+
+
 def email_compains(emails, quiz_id, user_id):
-
     quiz_detail = QuizCollection.find_quiz(quiz_id)
+    if not quiz_detail:
+        return {"error": "Quiz not found"}, 404
 
-    # print("-------------------------------", quiz_detail)
-
-    topic_name=quiz_detail.get("topic")
-    duration=quiz_detail.get("time_duration")
+    topic_name = quiz_detail.get("topic")
+    duration = quiz_detail.get("time_duration")
 
     emails_no = len(emails)
     cost_per_email = int(os.getenv("TOKEN_COST_EMAIL", 100))
-
     total_cost = emails_no * cost_per_email
 
     token_present = UserTokenCollection.find_user_token(user_id)
 
     if token_present < total_cost:
-        return {"error": "Not enough tokens"}, 400
+        return {"error": f"Not enough tokens. Required: {total_cost}, Available: {token_present}"}, 400
 
+    # Deduct tokens
     UserTokenCollection.spend_token(user_id, total_cost)
 
-    email_send = send_quiz_email_to_students(
-
-        student_emails=emails,   # ✅ FIXED
+    # Send email (non-blocking if you already made it threaded)
+    send_quiz_email_to_students(
+        student_emails=emails,
         topic_name=topic_name,
         duration=duration
     )
 
-    return email_send
+    return {"message": "Emails queued / sent successfully"}, 200
 

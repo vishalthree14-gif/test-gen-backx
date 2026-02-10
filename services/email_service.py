@@ -32,6 +32,9 @@ def send_quiz_email_to_students(student_emails, topic_name, duration):
     logger.info(f"Started background email send for {len(student_emails)} students")
 
 
+
+
+
 # from flask_mail import Message
 # from flask import current_app
 
