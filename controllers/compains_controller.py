@@ -6,6 +6,7 @@ from models.quiz_model import QuizCollection
 from models.user_token_model import UserTokenCollection
 import os
 from dotenv import load_dotenv
+from flask import current_app   # make sure to import
 
 load_dotenv()
 
@@ -134,12 +135,21 @@ def email_compains(emails, quiz_id, user_id):
     # Deduct tokens
     UserTokenCollection.spend_token(user_id, total_cost)
 
-    # Send email (non-blocking if you already made it threaded)
+    # # Send email (non-blocking if you already made it threaded)
+    # send_quiz_email_to_students(
+    #     student_emails=emails,
+    #     topic_name=topic_name,
+    #     duration=duration
+    # )
+
     send_quiz_email_to_students(
         student_emails=emails,
         topic_name=topic_name,
-        duration=duration
+        duration=duration,
+        app=current_app     # ← pass it here
     )
 
+
     return {"message": "Emails queued / sent successfully"}, 200
+
 
