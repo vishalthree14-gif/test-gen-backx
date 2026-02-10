@@ -17,8 +17,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-VERCEL_FRONTEND = os.getenv("VERCEL_FRONTEND")
-
 
 app = Flask(__name__)
 
@@ -38,14 +36,37 @@ mail = Mail(app)
 app.mail = mail
 
 # -------------------- CORS --------------------
-# CORS(
-#     app,
-#     supports_credentials=True,
-#     origins=[VERCEL_FRONTEND]
-# )
+
+VERCEL_FRONTEND = os.getenv("VERCEL_FRONTEND")
 
 
-CORS(app, resources={r"/*": {"origins": VERCEL_FRONTEND, "supports_credentials": True}})
+# Defensive: fallback if not set
+allowed_origins = VERCEL_FRONTEND if VERCEL_FRONTEND else "*"
+
+# If it's a single string, make it a list for safety
+if isinstance(allowed_origins, str):
+    allowed_origins = [allowed_origins]
+
+CORS(
+    app,
+    resources={r"/*": {
+        "origins": allowed_origins,
+        "supports_credentials": True,
+        "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+        "allow_headers": [
+            "Content-Type",
+            "Authorization",
+            "Accept",
+            "X-Requested-With",
+            "Access-Control-Allow-Origin",
+            "Access-Control-Request-Headers",
+            "Access-Control-Request-Method"
+        ],
+        "expose_headers": ["Authorization", "Content-Disposition"],
+        "max_age": 600  # Cache preflight for 10 min
+    }}
+)
+
 
 
 handler = Mangum(app)
